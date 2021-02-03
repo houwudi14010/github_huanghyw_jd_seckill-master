@@ -1,0 +1,30 @@
+POST https://marathon.jd.com/seckillnew/orderService/submitOrder.action?skuId=100012043978 HTTP/1.1
+Host: marathon.jd.com
+Connection: keep-alive
+Content-Length: 695
+Accept: application/json, text/plain, */*
+User-Agent: jdapp;android;9.3.4;10;3353139323231303139333039333-13D2464353338333633633265303;network/wifi;model/SM-G9730;addressid/771791490;aid/9754014e6890f575;oaid/;osVer/29;appBuild/86388;partner/ks003;eufv/1;jdSupportDarkMode/0;Mozilla/5.0 (Linux; Android 10; SM-G9730 Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/86.0.4240.185 Mobile Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Origin: https://marathon.jd.com
+X-Requested-With: com.jingdong.app.mall
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://marathon.jd.com/seckillM/seckill.action?skuId=100012043978&num=1&rid=1611108046
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh-HK;q=0.9,zh;q=0.8,en-US;q=0.7,en;q=0.6
+Cookie: pt_pin=jd_751253e85915d; pwdt_id=jd_751253e85915d; shshshfpb=ybSeqvh5%20JEtmwgm1%209R7ag%3D%3D; shshshfpa=53592c9d-3e75-8116-a159-61b1bed0b86a-1568271477; webp=1; visitkey=30574749819088452; __jdu=1599294368019615186716; __jdc=121091540; cartLastOpTime=1604302529; cartNum=66; retina=1; cid=8; sc_width=412; __wga=1609381907267.1609381833515.1601654413091.1599873116287.3.3; qd_uid=KJEKV7SM-DXGA00WO6SQVBB3252ZE; qd_fs=1609523721523; 3AB9D23F7A4B3C9B=A6G4WECZFD4SUKCD5B5ZBZD7276J5F4FTQERPT7HJFZDTDG4AM7N36IUETYLVOIOZJQHH55VVOJH72VEA5QYDWFOYE; plusCustomBuryPointToken=1609899506149_4020; unpl=ADC_9J7h8CFEjeiZuIWYHuZ%2BCrNhVG7dOdgujU70d%2BB3y4HOfinAIhI6K%2B%2FRLSroNFtc%2FpQXOk8%2FPrUymgzBzyoRCQv5VHAYIhT55Z1KgY5oO9GH2jIX7m4wgyYbMtGIPdrQe3onSXYOoM5Xcnsnkm8nSpvauoRUS%2BD7LOgcBb8O5oE%3D%7CV2_ZzNtbUtVRBMnDREEeBhYBGIDRl8RXkYWdwwWU3kRXlIwAxteclRCFnUUR1RnGF8UZgMZWUJcQBJFCEJkexhdBGUAEV1LVnMVdgpHV3IpVWtkBhJbQ19CF3JmRlV6dx5RN0BABHJUQyV0OE5SfxxdBWJXFVRKVhQRcwx2ZHIYbAduChdUQlFzzMq8ktXezvuzs761bUNnQiV0OBA6exhdBGYKEF1AUw4dcwxDVXscCAJuCxMKRlFHJXQ4Rg%3D%3D; qd_ls=1610509295215; qd_ts=1610523565370; qd_sq=5; pt_key=app_openAAJgBnY3ADBAUxyW5Ww6hDB-69Rq9TjsKDFsepcUrEk02FieAq5423RmTRy5-Fzre3os8VgoFDg; sid=e010a3e0085dc13bf52fd9bf686a1c7w; __jdv=121091540%7Ckong%7Ct_1000170135%7Ctuiguang%7Cnotset%7C1610417228211; shshshfp=2ddc1eee64a9c04f322daa3eeb791182; BATQW722QTLYVCRD={"tk":"jdd01HXYPM42UYSBPF6RTC4VFWRBLTZLISOIWGZTLWQMLYOQCURLNXBCJPMSL5NJT4SC6XLIYZQIN32S65P4S6DSOQWHRX25EC55TNPV3JFQ01234567","t":1611062224647}; __jda=121091540.1599294368019615186716.1599294368.1611061977.1611107664.66; __jdb=121091540.1.1599294368019615186716|66.1611107664; mba_sid=626.2; pre_session=tOZmFS+iFWybvodxNwf4JooS/VrsuIHtPlTvWBn98W4=|690; pre_seq=1; __jd_ref_cls=Mnpm_ComponentApplied; mba_muid=1599294368019615186716.626.1611107667611; mid=imUkt8mpbevEc8F1puG5xZEl9Um8myaQw6kUyFdO-zw
+
+num=2&addressId=541283091&yuShou=true&isModifyAddress=false&name=%E7%8E%8B%E7%A7%8B%E6%B7%9E&provinceId=1&provinceName=%E5%8C%97%E4%BA%AC&cityId=2901&cityName=%E6%98%8C%E5%B9%B3%E5%8C%BA&countyId=55549&countyName=%E5%8C%97%E4%B8%83%E5%AE%B6%E9%95%87&townId=0&townName=&addressDetail=%E4%B8%9C%E4%B8%89%E6%97%97%E6%9D%91106%E5%8F%B7&mobile=155%2A%2A%2A%2A1203&mobileKey=c4df8ae67256b5f7aeb91d021a0d312f&email=&invoiceTitle=4&invoiceCompanyName=&invoiceContent=1&invoiceTaxpayerNO=&invoiceEmail=&invoicePhone=155%2A%2A%2A%2A1203&invoicePhoneKey=c4df8ae67256b5f7aeb91d021a0d312f&invoice=true&password=&codTimeType=3&paymentType=4&overseas=0&phone=&areaCode=86&token=aefc1550085915abd95f3abfde85b4cf
+HTTP/1.1 200 OK
+Date: Wed, 20 Jan 2021 02:19:20 GMT
+Content-Type: text/html;charset=UTF-8
+Content-Length: 118
+Connection: keep-alive
+Set-Cookie: seckillSku=100012043978;domain=marathon.jd.com;path=/;expires=Wed, 20-Jan-21 02:21:20 GMT
+Set-Cookie: seckillSid=;domain=marathon.jd.com;path=/;expires=Wed, 20-Jan-21 02:21:20 GMT
+Set-Cookie: seckillSku=100012043978;domain=marathon.jd.com;path=/;expires=Wed, 20-Jan-21 02:21:20 GMT
+Set-Cookie: seckillSid=;domain=marathon.jd.com;path=/;expires=Wed, 20-Jan-21 02:21:20 GMT
+Server: jfe
+
+{"errorMessage":"很遗憾没有抢到，再接再厉哦。","orderId":0,"resultCode":90008,"skuId":0,"success":false}
