@@ -1,21 +1,45 @@
 import requests
 
-headers = {
-    # 'Connection': 'keep-alive',
-    # 'sec-ch-ua': '"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"',
-    # 'Accept': 'application/json, text/plain, */*',
-    # 'sec-ch-ua-mobile': '?0',
-    # 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36',
-    'Content-Type': 'application/json;charset=UTF-8',
-    # 'Origin': 'https://www.9kd.com',
-    # 'Sec-Fetch-Site': 'same-site',
-    # 'Sec-Fetch-Mode': 'cors',
-    # 'Sec-Fetch-Dest': 'empty',
-    # 'Accept-Language': 'zh-CN,zh;q=0.9,ja;q=0.8',
+cookies = {
+    'BIDUPSID': '208F3FFB79BE951B1776C8B8D97F8AA9',
+    'PSTM': '1613956978',
+    '__yjs_duid': '1_9187501c2c8129a6587c232008428dcf1613958606958',
+    'BDUSS': '0xY2FDaUhGTmdKdlJWTUw2QkNiM3JOS1kzbGYyc2JvMURPamdsSnpWSHVvVnBnRVFBQUFBJCQAAAAAAAAAAAEAAAAb6XQ072LgkwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAO4UM2DuFDNgUi',
+    'BDUSS_BFESS': '0xY2FDaUhGTmdKdlJWTUw2QkNiM3JOS1kzbGYyc2JvMURPamdsSnpWSHVvVnBnRVFBQUFBJCQAAAAAAAAAAAEAAAAb6XQ072LgkwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAO4UM2DuFDNgUi',
+    'BAIDUID': '610EBE2F82C4CC5572E7C40E2E769875:FG=1',
+    'BDSFRCVID': 'UIDOJexroG3Vd5oe8hCLb4DmEoizkVOTDYrEOwXPsp3LGJLVgVMXEG0PtEhTCoub_2AUogKK0gOTH6KF_2uxOjjg8UtVJeC6EG0Ptf8g0M5',
+    'H_BDCLCKID_SF': 'tR-qVIK5tIK3H48k-4QEbbQH-UnLqMPt22OZ04n-ah05SR-GhPosL4-hqHoytnT8X55x0J7m3UTKsq76Wh35K5tTQP6rLtbpBGb4KKJxbPbh8U7-j-5rDx_AhUJiB5OMBan7_qvIXKohJh7FM4tW3J0ZyxomtfQxtNRJ0DnjtpChbCDRe5LbDTjM-xQ0atcK2I6ysJoq2RbhKROvhjR4Wb0gyxomtjj0ymQl2MoH2UAWOTCGhTO0Dl_EbJtqLUkqKC8qVU7hyf5SM4tmLPcbXMT3QttjQTvufIkja-KELK_hsJ7TyU42hf47yhDL0q4Hb6b9BJcjfU5MSlcNLTjpQT8r5MDOK5OhJRLDVC_yJKPhhDvPMCTBbJt_-U-X5-RLfbcR_p7F5l8-h43bqtQIXPLJhUn8e6QyJTLHoJcX-ROxOKQphTOkKqvbDp6T34QBMDc-QpbN3KJm_nL9bT3v5tD8K-QJ2-biWbRL2Mbdbj6P_IoG2Mn8M4bb3qOpBtQmJeTxoUJ25DnJhhCGe6KbjjJyDa0jqbvWttoLBRrj-b7SKROvhjRb5JLgyxom2xvmQgvqaROH2n7of5CGhTO0DxPUDMJ9LUvQMgJu2bT_Lx7YVbTLehjkbfJBQttjQn3hfIkja-5t5b5bqb7TyU42bU47yaji0q4Hb6b9BJcjfU5MSlcNLTjpQT8r5MDOK5OuJRLDVILyJC02MDvPKITD-tFO5eT22-usQm5R2hcHMPoosIOKb5oobjkJLPvatU3L3CO0XJvCBMbUotoHXnJi0btQDPvxBf7p5acuhp5TtUJMsJn2LPnh-lRXLJoyKMnitIv9-pPKWhQrh459XP68bTkA5bjZKxtq3mkjbPbDfn028DKu-n5jHjJLjHLf3H',
+    'BDSFRCVID_BFESS': 'UIDOJexroG3Vd5oe8hCLb4DmEoizkVOTDYrEOwXPsp3LGJLVgVMXEG0PtEhTCoub_2AUogKK0gOTH6KF_2uxOjjg8UtVJeC6EG0Ptf8g0M5',
+    'H_BDCLCKID_SF_BFESS': 'tR-qVIK5tIK3H48k-4QEbbQH-UnLqMPt22OZ04n-ah05SR-GhPosL4-hqHoytnT8X55x0J7m3UTKsq76Wh35K5tTQP6rLtbpBGb4KKJxbPbh8U7-j-5rDx_AhUJiB5OMBan7_qvIXKohJh7FM4tW3J0ZyxomtfQxtNRJ0DnjtpChbCDRe5LbDTjM-xQ0atcK2I6ysJoq2RbhKROvhjR4Wb0gyxomtjj0ymQl2MoH2UAWOTCGhTO0Dl_EbJtqLUkqKC8qVU7hyf5SM4tmLPcbXMT3QttjQTvufIkja-KELK_hsJ7TyU42hf47yhDL0q4Hb6b9BJcjfU5MSlcNLTjpQT8r5MDOK5OhJRLDVC_yJKPhhDvPMCTBbJt_-U-X5-RLfbcR_p7F5l8-h43bqtQIXPLJhUn8e6QyJTLHoJcX-ROxOKQphTOkKqvbDp6T34QBMDc-QpbN3KJm_nL9bT3v5tD8K-QJ2-biWbRL2Mbdbj6P_IoG2Mn8M4bb3qOpBtQmJeTxoUJ25DnJhhCGe6KbjjJyDa0jqbvWttoLBRrj-b7SKROvhjRb5JLgyxom2xvmQgvqaROH2n7of5CGhTO0DxPUDMJ9LUvQMgJu2bT_Lx7YVbTLehjkbfJBQttjQn3hfIkja-5t5b5bqb7TyU42bU47yaji0q4Hb6b9BJcjfU5MSlcNLTjpQT8r5MDOK5OuJRLDVILyJC02MDvPKITD-tFO5eT22-usQm5R2hcHMPoosIOKb5oobjkJLPvatU3L3CO0XJvCBMbUotoHXnJi0btQDPvxBf7p5acuhp5TtUJMsJn2LPnh-lRXLJoyKMnitIv9-pPKWhQrh459XP68bTkA5bjZKxtq3mkjbPbDfn028DKu-n5jHjJLjHLf3H',
+    'Hm_lvt_6859ce5aaf00fb00387e6434e4fcc925': '1614845791,1614851136,1614851240,1615165729',
+    'shitong_key_id': '2',
+    'H_PS_PSSID': '33356_33256_33273_33594_33570_33392_26350',
+    'delPer': '0',
+    'PSINO': '2',
+    'BA_HECTOR': '2k010la40l858k80d81g4augh0r',
+    'BDORZ': 'B490B5EBF6F3CD402E515D22BCDA1598',
+    'BAIDUID_BFESS': '3F3F150D38D152315DC9909057892743:FG=1',
+    'ZD_ENTRY': 'empty',
+    'Hm_lpvt_6859ce5aaf00fb00387e6434e4fcc925': '1615166435',
+    'ab_sr': '1.0.0_NWRkYmE5YTFiOGFjZDFlYTA2MDUxZTE5OTIzYmM2YjhkMDcxZTg1NGY5MWU3MTExOGI0MWI2MWU0NzJlYjVlMzdhYTRmZTI4MWE2NTI4MmZlMDA4YmI4NGExZDc5ZTU3',
+    'shitong_data': 'dbdf29d6fefaba7fbe54a5f08c56473fe62657d4818cfc3475da5c754c9926a908d06f9c806606460150cd58de1501ba376c368ab857a5286deb46af0c0f6f1c7044d9f154873c8c22a38f3e06c83126aeb9682075d545d3b288b5d64eaeb651dfb772f3fc8622e1f36c47074bf7a727f59281bc8a3eb360b5b68cf0d6f83259',
+    'shitong_sign': 'e9a973dc',
 }
 
-data = '{"firstId":0,"lastId":0,"limit":20,"page":1,"product":3,"tagId":0}'
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36',
+    'Referer': 'https://zhidao.baidu.com/search?word=%E5%81%9C%E7%94%B5&ie=gbk&site=-1&sites=0&date=2&pn=0',
+}
 
-response = requests.post('https://9kd.com/api/kd-content/contents/list/pc', headers=headers, data=data)
+params = (
 
-print(response.text)
+    ('word', '\u505C\u7535'),
+)
+
+response = requests.get('https://zhidao.baidu.com/search', headers=headers, params=params, cookies=cookies)
+
+#NB. Original query string below. It seems impossible to parse and
+#reproduce query strings 100% accurately so the one below is given
+#in case the reproduced version is not "correct".
+# response = requests.get('https://zhidao.baidu.com/search?lm=0&rn=10&pn=0&fr=search&ie=gbk&word=%E5%81%9C%E7%94%B5', headers=headers, cookies=cookies)
+print(response.content)
