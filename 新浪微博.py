@@ -21,7 +21,9 @@ headers = {
     'sec-fetch-dest': 'empty',
     'referer': 'https://weibo.com/u/2828741892',
     'accept-language': 'zh-CN,zh;q=0.9,ja;q=0.8',
-    'cookie': 'SINAGLOBAL=528688026201.6336.1613962949023; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWymNhhY0SzjnBEUszxE-S45JpX5KMhUgL.FoqcSK-NeoepShM2dJLoIfQLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1K2L1h5t; WBPSESS=rqSHduCmTE6mwR3AmolJkl1XkzTcvYH5iTl5vDV377sP2apMFgmeBM1RPARFGzDFwPQtkf_B9CtNPyzN3W0X0op8RUaIXVX5-qP3mBVzFCw93kKXKgefWjURtuolWbsL; ULV=1615965942520:4:2:1:9997432940735.62.1615965942341:1615532004936; ALF=1647566333; SSOLoginState=1616030333; SCF=ApM_kj7Dez93SnOvW5JWvXPR1nRXpfshE-RxvP3v0UrR-taOxIB6pkIwTnbSX9ub-faEyv3SIYiCFP-twlftxB0.; SUB=_2A25NVtotDeRhGeBI7lcW8i3NzzuIHXVuIkzlrDV8PUNbmtAKLROikW9NRpWnaBFV-ULlFmeRohznybJtmxpIB85m; XSRF-TOKEN=azVGwJAZUslClEPHpZmI-d6J',
+}
+old_cookies={
+    'cookie': 'SINAGLOBAL=528688026201.6336.1613962949023; UOR=,,login.sina.com.cn; ULV=1616133981225:5:3:2:3463223176561.0054.1616133981215:1615965942520; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWymNhhY0SzjnBEUszxE-S45JpX5KMhUgL.FoqcSK-NeoepShM2dJLoIfQLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1K2L1h5t; ALF=1647911715; SSOLoginState=1616375715; SCF=ApM_kj7Dez93SnOvW5JWvXPR1nRXpfshE-RxvP3v0UrRqhxVClO7WSNdtkGPAvp4i6AesxBG-i6IZsH3SiHiwkc.; SUB=_2A25NU5_zDeRhGeBI7lcW8i3NzzuIHXVuKPY7rDV8PUNbmtAKLRKtkW9NRpWnaEw_9eQFCxmA-Kj-L7S5iO-4FKis; XSRF-TOKEN=pkWRY1tFa1un5Sy7KlQrH-6D; WBPSESS=rqSHduCmTE6mwR3AmolJkl1XkzTcvYH5iTl5vDV377vqpqpzVKQ0_RkbviGlzfyOGs_hf95WZzQIQaoHCc9PhNobuXh5nHLeCrQRfStajMzhk4p-4sw3YDiOml86VRMT',
 }
 paramss = (
     ('id', 'K48eEa5Vk'),
@@ -68,7 +70,7 @@ def article(url,contentURL,articleurl):
         push_state = 0
         #site = "公主殿下的树洞"
         site_id = 521
-        contentrsp = ss.get(contentURL,headers = headers)
+        contentrsp = ss.get(contentURL,headers = headers,cookies = old_cookies)
         contentbs = BeautifulSoup(contentrsp.content, 'html.parser', from_encoding='utf-8')
         rsp = ss.get(url)
         bs = BeautifulSoup(rsp.content, 'html.parser', from_encoding='utf-8')
@@ -130,12 +132,12 @@ def my_job():
         ('page', '1'),
         ('feature', '0')
     )
-    lisy = [1876879003,6586580900,1853850492,6512991534,2282795285,1843070674,2686579097,1916501605,2865341160,5703712834]
+    lisy = [1876879003,2882591901,1853850492,6512991534,2282795285,1843070674,2686579097,1916501605,2865341160,5703712834]
     for i in lisy:
         params = dict(params)
         params["uid"] = i
         print(params)
-        response = requests.get('https://weibo.com/ajax/statuses/mymblog', headers=headers, params=params)
+        response = requests.get('https://weibo.com/ajax/statuses/mymblog', headers=headers, params=params,cookies=old_cookies)
 
         #NB. Original query string below. It seems impossible to parse and
         #reproduce query strings 100% accurately so the one below is given

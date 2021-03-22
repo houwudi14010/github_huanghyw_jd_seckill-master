@@ -20,20 +20,28 @@ db = client.article  # 连接对应的数据库名称，系统默认数据库adm
 # 连接所用集合，也就是我们通常所说的表
 collection = db.article_list
 cookies = {
-    'uid': '85630c743c014b538e14d9b9a7831516',
-    'wdcid': '5514aede23918042',
-    'pc': '8447c974605386461312a244c9b889fc.1588943861.1588943861.1',
-    'tma': '182794287.65540369.1591235049019.1591235049019.1591235049019.1',
-    'fingerprint': '7e6deec267d01c2e6afa246b87b6d9c3',
-    'bfd_g': '87205254007bf95200005f7b054efcc45e44ee82',
-    'bfdid': '87205254007bf95200005f7b054efcc45e44ee82',
+    'wdcid': '158755e826bfcc2a',
+    'XHPLAYER-INSTANCE': 'cc5847ef-3cdb-40d6-b25f-8aeea406a6cd',
+    'bdshare_firstime': '1614585040968',
+    'fingerprint': 'c4f90b458e6c1558210db2dcbf357077',
+    'uid': 'b2a1d2d7c4a94ceb9667863da09056ab',
+    'bfdid': '87205254007bf95200005f7f03f15c21603c9d4b',
+    'bfd_g': '87205254007bf95200005f7f03f15c21603c9d4b',
+    'tma': '182794287.57790087.1614585143271.1614585143271.1615885665528.2',
+    'tmd': '5.182794287.57790087.1614585143271.',
+    'wdlast': '1616378450',
 }
 
 headers = {
-
+    'Connection': 'keep-alive',
+    'Cache-Control': 'max-age=0',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+    'Accept-Language': 'zh-CN,zh;q=0.9,ja;q=0.8',
 }
 
-data = {
+datas = {
   'javax.faces.ViewState': 'j_id9:j_id15',
   'primefacesPartialRequest': 'true',
   'form:refreshData_paging': 'true',
@@ -59,47 +67,48 @@ def ccc ():
 def articleURL(value,url,site):
     # 取出中文
 
+    try:
+        value = value[0]
+        ss = 0
+        # 请求地址 获取网页源代码
+        rsp = requests.get(url, headers=headers)
+        bs = BeautifulSoup(rsp.content, 'html.parser', from_encoding='utf-8')
+        title = bs.select("span.title")
+        title = title[0]
+        title = title.text
+        content = str(bs)
+        content_html = re.compile('<div id="detail">[\s\S]*?.</div>').findall(content)
+        content_html = content_html[ss]
+        dr = re.compile(r'<[^>]+>', re.S)
+        content_html = dr.sub('', content_html)
+        content_html = content_html.replace("\n", "")
 
-    value = value[0]
-    ss = 0
-    # 请求地址 获取网页源代码
-    rsp = requests.get(url, headers=headers)
-    bs = BeautifulSoup(rsp.content, 'html.parser', from_encoding='utf-8')
-    title = bs.select("span.title")
-    title = title[0]
-    title = title.text
-    content = str(bs)
-    content_html = re.compile('<div id="detail">[\s\S]*?.</div>').findall(content)
-    content_html = content_html[ss]
-    dr = re.compile(r'<[^>]+>', re.S)
-    content_html = dr.sub('', content_html)
-    content_html = content_html.replace("\n", "")
-
-    push_state = 0
-    siteid = 1038904
-    #取出发表时间
-    time = re.compile('<span class="year"><em> (.*?)</em></span><span class="day"><em> (.*?)</em>/<em> (.*?)</em></span><span class="time"> (.*?):(.*?):(.*?)</span>').findall(content)
-    for o in time:
-        a,b,c,d,e,f,= o[0],o[1],o[2],o[3],o[4],o[5],
-        print(a,b,c,d,e,f)
-        time = a+"-"+b+"-"+c+" "+d+":"+e+":"+f
-        #取出正文
-        wy = time+str(value)
-        wy = md5(wy)
-        ss = ss+1
-        data = []
-        data.append(InsertOne({"url": url, "title": title,"aid":value,"content":content_html,"site":site,"pub_time":time,"only_id":wy,"push_state":push_state,"site_id":siteid}))
-        try:
-            collection.bulk_write(data)
-        except:
-            import traceback
-        # 关闭连接
-        client.close()
-
+        push_state = 0
+        siteid = 1038904
+        #取出发表时间
+        time = re.compile('<span class="year"><em> (.*?)</em></span><span class="day"><em> (.*?)</em>/<em> (.*?)</em></span><span class="time"> (.*?):(.*?):(.*?)</span>').findall(content)
+        for o in time:
+            a,b,c,d,e,f,= o[0],o[1],o[2],o[3],o[4],o[5],
+            print(a,b,c,d,e,f)
+            time = a+"-"+b+"-"+c+" "+d+":"+e+":"+f
+            #取出正文
+            wy = time+str(value)
+            wy = md5(wy)
+            ss = ss+1
+            data = []
+            data.append(InsertOne({"url": url, "title": title,"aid":value,"content":content_html,"site":site,"pub_time":time,"only_id":wy,"push_state":push_state,"site_id":siteid}))
+            try:
+                collection.bulk_write(data)
+            except:
+                pass
+            # 关闭连接
+            client.close()
+    except Exception as err:
+        print(err)
+        pass
 def my_job(job_id="xxx"):
   print("===========")
   try:
-
     s = requests.Session()
     response = requests.get('http://www.xinhuanet.com/', headers=headers, cookies=cookies, verify=False)
 #    response = s.post('http://www.xinhuanet.com/', headers=headers, cookies=cookies, verify=False)
@@ -116,16 +125,12 @@ def my_job(job_id="xxx"):
           continue
       else:
         try:
-
             articleURL(value,article_url,site)
         except:
             pass
-
-
-
   except Exception as err:
     print(err)
-
+    pass
 
 
 # sched = BlockingScheduler()
@@ -155,10 +160,6 @@ def my_job(job_id="xxx"):
 
 def timedTask():
   print("1111")
-
-
-
-
 
 
 def func():

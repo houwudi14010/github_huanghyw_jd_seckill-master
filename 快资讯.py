@@ -5,8 +5,6 @@ import time
 import hashlib
 from bs4 import BeautifulSoup
 from pymongo import MongoClient, InsertOne
-from pyquery import PyQuery as pq
-import json
 client = MongoClient('localhost', 27017)
 print(client)  # 成功则说明连接成功
 # 用户验证 连接mydb数据库,账号密码认证
@@ -91,51 +89,52 @@ def md5(str):
 # response = requests.get('https://m.look.360.cn/transcoding?callback=jQuery19108678869398415983_1615887565219&url=99ab0188bed7661e2&uid=4ec0ca5d0994f494a3fde306a592b7a2&sign=look&outPutReplacePic=&direct=data&page=&f=jsonp&scheme=https&_=1615887565236', headers=headers, cookies=cookies)
 
 def my_job():
-    response = requests.get('https://papi.look.360.cn/mlist', headers=headers, params=params)
-    response = response.content.decode("utf-8")
-    url = re.compile('"gnid":"(.*?)",').findall(str(response))
-    site = "快资讯-网站"
-    siteid = 1039033
-    push_state = 0
-    for i in url:
-        try:
-            print()
-            url = "https://m.look.360.cn/transcoding?callback=jQuery19108678869398415983_1615887565214&direct=data&url=" + i
-            urls = "https://www.360kuai.com/" + i
-            ss = requests.Session()
-            contentrsp = ss.get(url)
-            contentbs = BeautifulSoup(contentrsp.content, 'html.parser', from_encoding='utf-8')
-            contentbs = str(contentbs)
-            content = re.compile('"content\\\\":\\\\"(.*?).",').findall(contentbs)
-            content = content[0]
-            content = content.replace('\\u003c','<')
-            content = content.replace('\\u003e', '>')
-            txt = re.sub("<[^>]*?>","",content)
-            title = re.compile('"title\\\\":\\\\"(.*?).",').findall(contentbs)
-            for t in title:
-                title = t
-            print(title)
-            times = re.compile('"pub_time\\\\":(.*?).,').findall(contentbs)
-            times = times[0]
-            times = times[0:10]
-            times = int(times)
-            timeArray = time.localtime(times)
-            end_time = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
-            print(end_time)
-            wy = i + end_time
-            value = md5(wy)
-            data = []
-            data.append(InsertOne(
-                {"url": urls, "title": title, "aid": value, "content": txt, "site": site, "pub_time": end_time,
-                 "only_id": value, "push_state": push_state, "site_id": siteid}))
-            try:
-                collection.bulk_write(data)
-            except:
-                import traceback
-            # 关闭连接
-            client.close()
-        except:
-            pass
+    try:
+        response = requests.get('https://papi.look.360.cn/mlist', headers=headers, params=params)
+        response = response.content.decode("utf-8")
+        url = re.compile('"gnid":"(.*?)",').findall(str(response))
+        site = "快资讯-网站"
+        siteid = 1039033
+        push_state = 0
+        for i in url:
+
+                print()
+                url = "https://m.look.360.cn/transcoding?callback=jQuery19108678869398415983_1615887565214&direct=data&url=" + i
+                urls = "https://www.360kuai.com/" + i
+                ss = requests.Session()
+                contentrsp = ss.get(url)
+                contentbs = BeautifulSoup(contentrsp.content, 'html.parser', from_encoding='utf-8')
+                contentbs = str(contentbs)
+                content = re.compile('"content\\\\":\\\\"(.*?).",').findall(contentbs)
+                content = content[0]
+                content = content.replace('\\u003c','<')
+                content = content.replace('\\u003e', '>')
+                txt = re.sub("<[^>]*?>","",content)
+                title = re.compile('"title\\\\":\\\\"(.*?).",').findall(contentbs)
+                for t in title:
+                    title = t
+                print(title)
+                times = re.compile('"pub_time\\\\":(.*?).,').findall(contentbs)
+                times = times[0]
+                times = times[0:10]
+                times = int(times)
+                timeArray = time.localtime(times)
+                end_time = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
+                print(end_time)
+                wy = i + end_time
+                value = md5(wy)
+                data = []
+                data.append(InsertOne(
+                    {"url": urls, "title": title, "aid": value, "content": txt, "site": site, "pub_time": end_time,
+                     "only_id": value, "push_state": push_state, "site_id": siteid}))
+                try:
+                    collection.bulk_write(data)
+                except:
+                    import traceback
+                # 关闭连接
+                client.close()
+    except:
+        pass
 def func():
   # 每2s执行一次
   my_job()
