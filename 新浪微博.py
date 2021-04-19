@@ -7,7 +7,7 @@ import time
 import requests
 from bs4 import BeautifulSoup
 from pymongo import InsertOne, collection, MongoClient
-
+ss = requests.Session()
 headers = {
     'authority': 'weibo.com',
     'sec-ch-ua': '^\\^Google',
@@ -23,11 +23,9 @@ headers = {
     'accept-language': 'zh-CN,zh;q=0.9,ja;q=0.8',
 }
 old_cookies={
-    'cookie': 'SINAGLOBAL=528688026201.6336.1613962949023; UOR=,,login.sina.com.cn; ULV=1616133981225:5:3:2:3463223176561.0054.1616133981215:1615965942520; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWymNhhY0SzjnBEUszxE-S45JpX5KMhUgL.FoqcSK-NeoepShM2dJLoIfQLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1KeLBKqLxK-L1K2L1h5t; ALF=1647911715; SSOLoginState=1616375715; SCF=ApM_kj7Dez93SnOvW5JWvXPR1nRXpfshE-RxvP3v0UrRqhxVClO7WSNdtkGPAvp4i6AesxBG-i6IZsH3SiHiwkc.; SUB=_2A25NU5_zDeRhGeBI7lcW8i3NzzuIHXVuKPY7rDV8PUNbmtAKLRKtkW9NRpWnaEw_9eQFCxmA-Kj-L7S5iO-4FKis; XSRF-TOKEN=pkWRY1tFa1un5Sy7KlQrH-6D; WBPSESS=rqSHduCmTE6mwR3AmolJkl1XkzTcvYH5iTl5vDV377vqpqpzVKQ0_RkbviGlzfyOGs_hf95WZzQIQaoHCc9PhNobuXh5nHLeCrQRfStajMzhk4p-4sw3YDiOml86VRMT',
+    'cookie':'SCF=ApM_kj7Dez93SnOvW5JWvXPR1nRXpfshE-RxvP3v0UrRMF3u5krfFkF8jrUTUujT29kCWTXyWRRPnnRBenInlzI.; SUB=_2A25NWHFpDeRhGeBI7lcW8i3NzzuIHXVuLOWhrDV8PUNbmtAfLW_9kW9NRpWnaAgtZpFn-06XxSCHJd_xUvTwHEz0;'
 }
-paramss = (
-    ('id', 'K48eEa5Vk'),
-)
+
 
 client = MongoClient('localhost', 27017)
 print(client)  # 成功则说明连接成功
@@ -43,16 +41,18 @@ def md5(str):
   m.update(str.encode("utf8"))
   return m.hexdigest()
 
-
 def onlys (wy):
     wy = md5(wy)
     return wy
 def insertdb (data):
+    downloadTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     try:
         collection.bulk_write(data)
-        print('添加完成')
+        collection.update_one(data, {'$set': data}, upsert=True)
+
+        print('添加完成'+downloadTime)
     except:
-        print('重复添加')
+        print('重复添加'+downloadTime)
 def trans_format(time_string, from_format, to_format='%Y.%m.%d %H:%M:%S'):
     """
     @note 时间格式转化
@@ -64,15 +64,13 @@ def trans_format(time_string, from_format, to_format='%Y.%m.%d %H:%M:%S'):
     time_struct = time.strptime(time_string,from_format)
     times = time.strftime(to_format, time_struct)
     return times
-def article(url,contentURL,articleurl):
+def article(url,contentURL,articleurl,proxy):
     try:
-        ss = requests.Session()
         push_state = 0
-        #site = "公主殿下的树洞"
         site_id = 521
-        contentrsp = ss.get(contentURL,headers = headers,cookies = old_cookies)
+        contentrsp = ss.get(contentURL,headers = headers,cookies = old_cookies,proxies=proxy)
         contentbs = BeautifulSoup(contentrsp.content, 'html.parser', from_encoding='utf-8')
-        rsp = ss.get(url)
+        rsp = ss.get(url,proxies=proxy)
         bs = BeautifulSoup(rsp.content, 'html.parser', from_encoding='utf-8')
         site = re.compile('"screen_name":"(.*?)",').findall(str(bs))
         print(url)
@@ -109,73 +107,63 @@ def article(url,contentURL,articleurl):
             insertdb(data)
     except Exception as err:
         print(err)
+        downloadTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print(downloadTime)
+        import traceback
+        traceback.print_exc()
         pass
     # 关闭连接
     client.close()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 def my_job():
-    params = (
-        ('uid', ''),
-        ('page', '1'),
-        ('feature', '0')
+    paramsss = (
+        ('type', 'uid'),
+        ('value', ''),
+        ('containerid', '')
     )
-    lisy = [1876879003,2882591901,1853850492,6512991534,2282795285,1843070674,2686579097,1916501605,2865341160,5703712834]
+    lisy = [2828741892,1876879003,2882591901,1853850492,6512991534,2282795285,1843070674,2686579097,1916501605,2865341160,5703712834]
     for i in lisy:
-        params = dict(params)
-        params["uid"] = i
-        print(params)
-        response = requests.get('https://weibo.com/ajax/statuses/mymblog', headers=headers, params=params,cookies=old_cookies)
+        try:
+            agentUrl = "http://47.96.91.228:82/get/"
+            res = requests.get(agentUrl)
 
-        #NB. Original query string below. It seems impossible to parse and
-        #reproduce query strings 100% accurately so the one below is given
-        #in case the reproduced version is not "correct".
-        # response = requests.get('https://weibo.com/ajax/statuses/mymblog?uid=3266943013&page=1&feature=0', headers=headers)
+            agenContent = res.content.decode("utf-8")
+            dataip = re.compile('"proxy": "(.*?)",').findall(str(agenContent))
+            ip = dataip[0]
+            proxy = {
+                'https://':ip,
+            }
 
+            requests.proxies = proxy
+            paramsss = dict(paramsss)
+            paramsss["value"] = i
+            paramsss["containerid"] = '107603' + str(paramsss["value"])
+            print(paramsss)
+            #response = requests.get('https://weibo.com/ajax/statuses/mymblog', headers=headers, params=params,cookies=old_cookies)
+            response = requests.get('https://m.weibo.cn/api/container/getIndex', params=paramsss)
 
-        #NB. Original query string below. It seems impossible to parse and
-        #reproduce query strings 100% accurately so the one below is given
-        #in case the reproduced version is not "correct".
-        # response = requests.get('https://weibo.com/ajax/statuses/mymblog?uid=3266943013&page=1&feature=0', headers=headers)
+            content = response.content.decode("utf-8")
+            url = re.compile('mblogid=(.*?)&').findall(str(content))
 
+            for urls in url:
+                ur = "https://weibo.com/ajax/statuses/show?id="+urls
+                contentURL = "https://weibo.com/ajax/statuses/longtext?id="+urls
+                articleurl = "https://weibo.com/"+str(i)+"/"+urls
+                article(ur, contentURL, articleurl, proxy)
+        except Exception as err:
+            import traceback
+            traceback.print_exc()
+            pass
 
-        #NB. Original query string below. It seems impossible to parse and
-        #reproduce query strings 100% accurately so the one below is given
-        #in case the reproduced version is not "correct".
-        # response = requests.get('https://weibo.com/ajax/statuses/mymblog?uid=2656274875&page=3&feature=0', headers=headers)
-        content = response.content.decode("utf-8")
-        url = re.compile('mblogid":"(.*?)"').findall(str(content))
-        for i in params:
-            uid = i[1]
-            break
-
-        print(uid)
-        for urls in url:
-            ur = "https://weibo.com/ajax/statuses/show?id="+urls
-            contentURL = "https://weibo.com/ajax/statuses/longtext?id="+urls
-            articleurl = "https://weibo.com/"+uid+"/"+urls
-
-            article(ur,contentURL,articleurl)
         #     #print(ur)
         # s = requests.Session()
         # response = s.get('http://www.xinhuanet.com/', headers=headers,params=params,  verify=False)
 
 def func():
-  # 每2s执行一次
-  my_job()
-  threading.Timer(30, func).start()
+
+    # 每2s执行一次
+    my_job()
+    threading.Timer(2, func).start()
 
 
 if __name__ == "__main__":

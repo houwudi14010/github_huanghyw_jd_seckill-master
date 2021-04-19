@@ -11,7 +11,7 @@ print(client)  # 成功则说明连接成功
 db = client.article  # 连接对应的数据库名称，系统默认数据库admin
 
 #db.authenticate('root', '你的密码password')
-
+ss = requests.Session()
 # 连接所用集合，也就是我们通常所说的表
 collection = db.article_list_kuaizixun
 headers = {
@@ -101,7 +101,6 @@ def my_job():
                 print()
                 url = "https://m.look.360.cn/transcoding?callback=jQuery19108678869398415983_1615887565214&direct=data&url=" + i
                 urls = "https://www.360kuai.com/" + i
-                ss = requests.Session()
                 contentrsp = ss.get(url)
                 contentbs = BeautifulSoup(contentrsp.content, 'html.parser', from_encoding='utf-8')
                 contentbs = str(contentbs)
